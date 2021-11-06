@@ -20,12 +20,18 @@ export class Server {
         this.app = express();
         this.port = process.env.PORT || '8080';
         this.database();
+        this.parser();
         this.routes();
     }
 
     //Metodo para conexion a db
     async database() {
         await dbConnection();
+    }
+
+    parser() {
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(express.json());
     }
 
     //Metodo para las rutas
@@ -43,8 +49,13 @@ export class Server {
 
 
     listen() {
-        this.app.listen(this.port, () => {
-            console.log(`Server running on port ${this.port}`);
-        })
+        try{
+            this.app.listen(this.port, () => {
+                console.log(`Server running on port ${this.port}`);
+            });
+        }
+        catch (error) {
+        console.log(error);
+    }
     }
 }

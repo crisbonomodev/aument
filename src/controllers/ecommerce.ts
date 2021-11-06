@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import Ecommerce from '../models/ecommerce'; 
+import bcrypt from "bcrypt";
 
 export const getEcommerces = (req: Request, res: Response) => {
     res.json({
@@ -15,12 +17,27 @@ const {id} = req.params;
     })
 }
 
-export const postEcommerce = (req: Request, res: Response) => {
-    const {body} = req;
-    
-        res.json({
-            msg: 'postEcommerce',
-            body
+export const postEcommerce = async (req: Request, res: Response) => {
+    let {name, password, mail} = req.body;
+    const salt = bcrypt.genSaltSync();
+
+    password = bcrypt.hashSync(password,salt);
+
+    const ecommerce = new Ecommerce({name, password, mail});
+
+    const verifyEmail = await Ecommerce.findOne({mail});
+
+        if(verifyEmail) {
+          return res.status(400).json({
+               error: 'Email already in use'
+            });
+        }
+
+        const newEcommerce = await ecommerce.save();
+
+        res.status(201).json({
+            msg: 'Ecommerce created successfully',
+            newEcommerce
         })
 }
 

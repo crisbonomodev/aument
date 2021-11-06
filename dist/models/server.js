@@ -29,6 +29,7 @@ class Server {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8080';
         this.database();
+        this.parser();
         this.routes();
     }
     //Metodo para conexion a db
@@ -36,6 +37,10 @@ class Server {
         return __awaiter(this, void 0, void 0, function* () {
             yield (0, config_1.dbConnection)();
         });
+    }
+    parser() {
+        this.app.use(express_1.default.urlencoded({ extended: true }));
+        this.app.use(express_1.default.json());
     }
     //Metodo para las rutas
     routes() {
@@ -50,9 +55,14 @@ class Server {
         });
     }
     listen() {
-        this.app.listen(this.port, () => {
-            console.log(`Server running on port ${this.port}`);
-        });
+        try {
+            this.app.listen(this.port, () => {
+                console.log(`Server running on port ${this.port}`);
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 }
 exports.Server = Server;

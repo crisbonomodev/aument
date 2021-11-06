@@ -1,8 +1,10 @@
 
 import  express, { Application, Request, Response, NextFunction } from "express"
+import { dbConnection } from "../db/config";
 import userRoutes from '../routes/user';
 import orderRoutes from '../routes/order';
 import ecommerceRoutes from '../routes/ecommerce';
+
 export class Server {
 
     private app: Application;
@@ -17,7 +19,13 @@ export class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '8080';
+        this.database();
         this.routes();
+    }
+
+    //Metodo para conexion a db
+    async database() {
+        await dbConnection();
     }
 
     //Metodo para las rutas

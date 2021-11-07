@@ -68,8 +68,17 @@ const orderSchema = new Schema({
         type: String,
     },
     customer: {
-        type: Object,
+        type: Schema.Types.ObjectId,
+        ref:'customer'
     },
+    channelId: {
+        type: Schema.Types.ObjectId,
+        ref:'channel'
+    },
+    ecommerce: {
+        type: Schema.Types.ObjectId,
+        ref: 'ecommerce'
+    }
 },
 {
     timestamps: {createdAt: true, updatedAt: true}

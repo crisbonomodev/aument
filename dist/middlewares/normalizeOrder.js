@@ -4,6 +4,7 @@ exports.normalizeOrder = void 0;
 const normalizeOrder = (req, res, next) => {
     let productsArray = [];
     const { body } = req;
+    const { customer } = body;
     body.products.forEach((product) => {
         let productToAdd = {
             depth: product.depth,
@@ -20,7 +21,7 @@ const normalizeOrder = (req, res, next) => {
     });
     const order = {
         channel: body.channel,
-        cancelReason: body.cancel_reason || body['cancel-reason'],
+        cancelReason: (body.cancel_reason ? body.cancel_reason : body['cancel-reason']),
         currency: body.currency,
         gateway: body.gateway,
         id: body.id,
@@ -40,6 +41,16 @@ const normalizeOrder = (req, res, next) => {
         number: body.number,
         products: productsArray,
         storefront: body.storefront,
+        customer: {
+            createdAt: customer.created_at || customer['created-at'],
+            email: customer.email,
+            id: customer.id,
+            lastOrderId: customer.last_order_id || customer['last-order-id'],
+            name: customer.name,
+            totalSpent: customer.total_spent || customer['total-spent'],
+            totalSpentCurrency: customer.total_spent_currency || customer['total-spent-currency'],
+            updatedAt: customer.updated_at || customer['updated-at'],
+        }
     };
     req.body = order;
     next();

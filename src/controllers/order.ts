@@ -5,19 +5,81 @@ import Ecommerce from "../models/ecommerce";
 import Order from "../models/order";
 import Channel from "../models/channel";
 
-export const getOrders = (req: Request, res: Response) => {
-    res.json({
-        msg: 'getOrders'
-    })
+export const getOrderById = async (req: Request, res: Response) => {
+
+    const {id} = req.params;
+
+    try {
+        const orderFound = await Order.findById(id);
+    
+        if(!orderFound) {
+          return  res.status(400).json({
+                message: 'order id invalid'
+            })
+        }
+
+        return res.status(200).json({
+            orderFound
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error getting order'
+        });
+    }
 }
 
-export const getOrder = (req: Request, res: Response) => {
-const {id} = req.params;
+export const getOrdersByEcommerce = async (req: Request, res: Response) => {
+    const id = req.headers['x-flow-ecommerce-id'];
 
-    res.json({
-        msg: 'getOrder',
-        id
-    })
+    try {
+        const ecommerceFound = await Ecommerce.findById(id);
+    
+        if(!ecommerceFound) {
+          return  res.status(400).json({
+                message: 'ecommerce invalid'
+            })
+        }
+    
+    
+        const orders = await Order.find({ecommerce: ecommerceFound});
+    
+        return res.status(200).json({
+            msg: `orders for e-commerce ${ecommerceFound.name}`,
+            orders
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error getting orders by e-commerce'
+        });
+    }
+}
+
+export const getOrdersByCustomer = async (req: Request, res: Response) => {
+
+    const {id} = req.params;
+
+    try {
+
+        const customerFound = await Customer.findById(id);
+
+        if(!customerFound) {
+            return  res.status(400).json({
+                message: 'customer id invalid'
+            })
+        }
+
+        const orders = await Order.find({customer: customerFound});
+
+
+        return res.status(200).json({
+            message: `Orders for customer ${customerFound.name}`,
+            orders
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error getting order'
+        });
+    }
 }
 
 export const postOrder = async (req: Request, res: Response) => {

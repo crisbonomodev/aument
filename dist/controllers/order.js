@@ -12,25 +12,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.putOrder = exports.postOrder = exports.getOrder = exports.getOrders = void 0;
+exports.deleteOrder = exports.putOrder = exports.postOrder = exports.getOrdersByCustomer = exports.getOrdersByEcommerce = exports.getOrderById = void 0;
 const customer_1 = __importDefault(require("../models/customer"));
 const ecommerce_1 = __importDefault(require("../models/ecommerce"));
 const order_1 = __importDefault(require("../models/order"));
 const channel_1 = __importDefault(require("../models/channel"));
-const getOrders = (req, res) => {
-    res.json({
-        msg: 'getOrders'
-    });
-};
-exports.getOrders = getOrders;
-const getOrder = (req, res) => {
+const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    res.json({
-        msg: 'getOrder',
-        id
-    });
-};
-exports.getOrder = getOrder;
+    try {
+        const orderFound = yield order_1.default.findById(id);
+        if (!orderFound) {
+            return res.status(400).json({
+                message: 'order id invalid'
+            });
+        }
+        return res.status(200).json({
+            orderFound
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Error getting order'
+        });
+    }
+});
+exports.getOrderById = getOrderById;
+const getOrdersByEcommerce = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.headers['x-flow-ecommerce-id'];
+    try {
+        const ecommerceFound = yield ecommerce_1.default.findById(id);
+        if (!ecommerceFound) {
+            return res.status(400).json({
+                message: 'ecommerce invalid'
+            });
+        }
+        const orders = yield order_1.default.find({ ecommerce: ecommerceFound });
+        return res.status(200).json({
+            msg: `orders for e-commerce ${ecommerceFound.name}`,
+            orders
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Error getting orders by e-commerce'
+        });
+    }
+});
+exports.getOrdersByEcommerce = getOrdersByEcommerce;
+const getOrdersByCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const customerFound = yield customer_1.default.findById(id);
+        if (!customerFound) {
+            return res.status(400).json({
+                message: 'customer id invalid'
+            });
+        }
+        const orders = yield order_1.default.find({ customer: customerFound });
+        return res.status(200).json({
+            message: `Orders for customer ${customerFound.name}`,
+            orders
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Error getting order'
+        });
+    }
+});
+exports.getOrdersByCustomer = getOrdersByCustomer;
 const postOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { channel, cancelReason, currency, gateway, id, languaje, locationId, name, ownerNote, paymentStatus, status, subtotal, token, discount, price, priceUsd, weight, shippedAt, number, products, storefront, customer } = req.body;
     const ecommerceId = req.headers['x-flow-ecommerce-id'];

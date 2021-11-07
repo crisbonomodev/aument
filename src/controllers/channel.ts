@@ -2,17 +2,59 @@ import { Request, Response } from "express";
 import Channel from '../models/channel'; 
 import Ecommerce from "../models/ecommerce";
 
-export const getChannels = (req: Request, res: Response) => {
-    res.json({
-        msg: 'getChannels'
-    })
+export const getChannelByEcommerceId = async (req: Request, res: Response) => {
+
+    const id = req.headers['x-flow-ecommerce-id'];
+
+    try {
+        const ecommerceFound = await Ecommerce.findById(id);
+    
+        if(!ecommerceFound) {
+          return  res.status(400).json({
+                message: 'ecommerce invalid'
+            })
+        }
+    
+    
+        const channelsFound = await Channel.find({ecommerce: ecommerceFound});
+    
+        return res.status(200).json({
+            msg: `channels for e-commerce ${ecommerceFound.name}`,
+            channelsFound
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error getting Channels by e-commerce'
+        });
+    }
+    
+
 }
 
-export const getChannel = (req: Request, res: Response) => {
+export const getChannelById = async (req: Request, res: Response) => {
 const {id} = req.params;
 
+try {
+    const channelFound = await Channel.findById(id);
+
+    if(!channelFound) {
+        return res.status(400).json({
+            message: 'invalid channel id'
+        });
+    }
+    return res.status(200).json({
+        channelFound
+    });
+
+
+} catch (error) {
+    res.status(500).json({
+            message: 'Error getting Channel'
+        });
+}
+
     res.json({
-        msg: 'getChannel',
+        msg: 'getChannelById',
         id
     })
 }

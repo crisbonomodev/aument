@@ -12,23 +12,55 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteChannel = exports.putChannel = exports.postChannel = exports.getChannel = exports.getChannels = void 0;
+exports.deleteChannel = exports.putChannel = exports.postChannel = exports.getChannelById = exports.getChannelByEcommerceId = void 0;
 const channel_1 = __importDefault(require("../models/channel"));
 const ecommerce_1 = __importDefault(require("../models/ecommerce"));
-const getChannels = (req, res) => {
-    res.json({
-        msg: 'getChannels'
-    });
-};
-exports.getChannels = getChannels;
-const getChannel = (req, res) => {
+const getChannelByEcommerceId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.headers['x-flow-ecommerce-id'];
+    try {
+        const ecommerceFound = yield ecommerce_1.default.findById(id);
+        if (!ecommerceFound) {
+            return res.status(400).json({
+                message: 'ecommerce invalid'
+            });
+        }
+        const channelsFound = yield channel_1.default.find({ ecommerce: ecommerceFound });
+        return res.status(200).json({
+            msg: `channels for e-commerce ${ecommerceFound.name}`,
+            channelsFound
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Error getting Channels by e-commerce'
+        });
+    }
+});
+exports.getChannelByEcommerceId = getChannelByEcommerceId;
+const getChannelById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    try {
+        const channelFound = yield channel_1.default.findById(id);
+        if (!channelFound) {
+            return res.status(400).json({
+                message: 'invalid channel id'
+            });
+        }
+        return res.status(200).json({
+            channelFound
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Error getting Channel'
+        });
+    }
     res.json({
-        msg: 'getChannel',
+        msg: 'getChannelById',
         id
     });
-};
-exports.getChannel = getChannel;
+});
+exports.getChannelById = getChannelById;
 const postChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { name, channelNumber } = req.body;
     const ecommerceId = req.headers['x-flow-ecommerce-id'];

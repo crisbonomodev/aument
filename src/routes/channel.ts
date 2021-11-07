@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getChannel, getChannels, postChannel, putChannel, deleteChannel } from "../controllers/channel";
+import { getChannelById, getChannelByEcommerceId, postChannel, putChannel, deleteChannel } from "../controllers/channel";
 
 const router = Router();
 
-router.get('/', getChannels);
-router.get('/:id', getChannel);
+router.get('/', getChannelByEcommerceId);
+router.get('/:id', getChannelById);
 router.post('/', postChannel);
 router.put('/:id', putChannel);
 router.delete('/:id', deleteChannel);

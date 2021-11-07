@@ -1,9 +1,10 @@
 
 import  express, { Application, Request, Response, NextFunction } from "express"
 import { dbConnection } from "../db/config";
+import ecommerceRoutes from '../routes/ecommerce';
+import channelRoutes from '../routes/channel';
 import userRoutes from '../routes/user';
 import orderRoutes from '../routes/order';
-import ecommerceRoutes from '../routes/ecommerce';
 
 export class Server {
 
@@ -12,8 +13,9 @@ export class Server {
     //paths para las rutas
     private apiPaths = {
         users: '/api/users',
-        orders: '/api/orders',
-        ecommerce: '/api/ecommerce'
+        ecommerce: '/api/ecommerce',
+        channel: '/api/channel',
+        orders: '/api/orders'
     };
 
     constructor() {
@@ -37,8 +39,9 @@ export class Server {
     //Metodo para las rutas
     routes() {
         this.app.use(this.apiPaths.users, userRoutes);
-        this.app.use(this.apiPaths.orders, orderRoutes);
         this.app.use(this.apiPaths.ecommerce, ecommerceRoutes);
+        this.app.use(this.apiPaths.channel, channelRoutes);
+        this.app.use(this.apiPaths.orders, orderRoutes);
         //Error handling
         this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(500).json({

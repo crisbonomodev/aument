@@ -15,16 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const config_1 = require("../db/config");
+const ecommerce_1 = __importDefault(require("../routes/ecommerce"));
+const channel_1 = __importDefault(require("../routes/channel"));
 const user_1 = __importDefault(require("../routes/user"));
 const order_1 = __importDefault(require("../routes/order"));
-const ecommerce_1 = __importDefault(require("../routes/ecommerce"));
 class Server {
     constructor() {
         //paths para las rutas
         this.apiPaths = {
             users: '/api/users',
-            orders: '/api/orders',
-            ecommerce: '/api/ecommerce'
+            ecommerce: '/api/ecommerce',
+            channel: '/api/channel',
+            orders: '/api/orders'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8080';
@@ -45,8 +47,9 @@ class Server {
     //Metodo para las rutas
     routes() {
         this.app.use(this.apiPaths.users, user_1.default);
-        this.app.use(this.apiPaths.orders, order_1.default);
         this.app.use(this.apiPaths.ecommerce, ecommerce_1.default);
+        this.app.use(this.apiPaths.channel, channel_1.default);
+        this.app.use(this.apiPaths.orders, order_1.default);
         //Error handling
         this.app.use((err, req, res, next) => {
             res.status(500).json({

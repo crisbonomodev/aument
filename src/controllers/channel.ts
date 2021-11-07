@@ -18,7 +18,7 @@ const {id} = req.params;
 }
 
 export const postChannel = async (req: Request, res: Response) => {
-    let {name, ecommerceId} = req.body;
+    let {name, ecommerceId, channelNumber} = req.body;
 
     try {
         const channelFound = await Channel.findOne({name: name});
@@ -39,7 +39,7 @@ export const postChannel = async (req: Request, res: Response) => {
             });
         }
     
-        const channel = new Channel({name, ecommerce});
+        const channel = new Channel({name, ecommerce, channelNumber});
         const newChannel = await channel.save();
     
         res.status(201).json({

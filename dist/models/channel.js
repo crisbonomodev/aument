@@ -15,5 +15,9 @@ const channelSchema = new Schema({
         type: String,
         required: [true, 'a name must be provided']
     },
+    channelNumber: {
+        type: Number,
+        required: [true, 'Channel number must be provided']
+    }
 });
 exports.default = model('Channel', channelSchema);

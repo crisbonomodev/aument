@@ -30,7 +30,7 @@ const getChannel = (req, res) => {
 };
 exports.getChannel = getChannel;
 const postChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { name, ecommerceId } = req.body;
+    let { name, ecommerceId, channelNumber } = req.body;
     try {
         const channelFound = yield channel_1.default.findOne({ name: name });
         if (channelFound) {
@@ -46,7 +46,7 @@ const postChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 message: 'ecommerce not found'
             });
         }
-        const channel = new channel_1.default({ name, ecommerce });
+        const channel = new channel_1.default({ name, ecommerce, channelNumber });
         const newChannel = yield channel.save();
         res.status(201).json({
             msg: 'Channel created successfully',

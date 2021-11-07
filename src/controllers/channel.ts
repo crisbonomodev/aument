@@ -18,17 +18,10 @@ const {id} = req.params;
 }
 
 export const postChannel = async (req: Request, res: Response) => {
-    let {name, ecommerceId, channelNumber} = req.body;
-
+    let {name,channelNumber} = req.body;
+    const ecommerceId = req.headers['x-flow-ecommerce-id'];
     try {
-        const channelFound = await Channel.findOne({name: name});
 
-        if(channelFound) {
-            return res.status(400).json({
-                code: 'error',
-                message: 'Channel already created'
-            });
-        }
 
         const ecommerce = await Ecommerce.findById(ecommerceId);
 
@@ -36,6 +29,14 @@ export const postChannel = async (req: Request, res: Response) => {
             return res.status(400).json({
                 code: 'error',
                 message: 'ecommerce not found'
+            });
+        }
+
+        const channelFound = await Channel.findOne({channelNumber: channelNumber, ecommerce: ecommerce});
+        if(channelFound) {
+            return res.status(400).json({
+                code: 'error',
+                message: 'Channel already created'
             });
         }
     

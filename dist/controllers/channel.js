@@ -30,20 +30,21 @@ const getChannel = (req, res) => {
 };
 exports.getChannel = getChannel;
 const postChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { name, ecommerceId, channelNumber } = req.body;
+    let { name, channelNumber } = req.body;
+    const ecommerceId = req.headers['x-flow-ecommerce-id'];
     try {
-        const channelFound = yield channel_1.default.findOne({ name: name });
-        if (channelFound) {
-            return res.status(400).json({
-                code: 'error',
-                message: 'Channel already created'
-            });
-        }
         const ecommerce = yield ecommerce_1.default.findById(ecommerceId);
         if (!ecommerce) {
             return res.status(400).json({
                 code: 'error',
                 message: 'ecommerce not found'
+            });
+        }
+        const channelFound = yield channel_1.default.findOne({ channelNumber: channelNumber, ecommerce: ecommerce });
+        if (channelFound) {
+            return res.status(400).json({
+                code: 'error',
+                message: 'Channel already created'
             });
         }
         const channel = new channel_1.default({ name, ecommerce, channelNumber });

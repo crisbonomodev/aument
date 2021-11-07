@@ -12,22 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEcommerce = exports.putEcommerce = exports.postEcommerce = exports.getEcommerce = exports.getEcommerces = void 0;
+exports.deleteEcommerce = exports.putEcommerce = exports.postEcommerce = exports.getEcommerce = void 0;
 const ecommerce_1 = __importDefault(require("../models/ecommerce"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const getEcommerces = (req, res) => {
-    res.json({
-        msg: 'getEcommerces'
-    });
-};
-exports.getEcommerces = getEcommerces;
-const getEcommerce = (req, res) => {
+const getEcommerce = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    res.json({
-        msg: 'getEcommerce',
-        id
+    const ecommerceFound = yield ecommerce_1.default.findById(id);
+    res.status(200).json({
+        ecommerceFound
     });
-};
+});
 exports.getEcommerce = getEcommerce;
 const postEcommerce = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { name, password, mail } = req.body;

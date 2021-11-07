@@ -2,20 +2,17 @@ import { Request, Response } from "express";
 import Ecommerce from '../models/ecommerce'; 
 import bcrypt from "bcrypt";
 
-export const getEcommerces = (req: Request, res: Response) => {
-    res.json({
-        msg: 'getEcommerces'
+export const getEcommerce = async (req: Request, res: Response) => {
+
+    const {id} = req.params;
+
+    const ecommerceFound = await Ecommerce.findById(id);
+
+    res.status(200).json({
+       ecommerceFound
     })
 }
 
-export const getEcommerce = (req: Request, res: Response) => {
-const {id} = req.params;
-
-    res.json({
-        msg: 'getEcommerce',
-        id
-    })
-}
 
 export const postEcommerce = async (req: Request, res: Response) => {
     let {name, password, mail} = req.body;

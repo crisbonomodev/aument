@@ -5,6 +5,7 @@ import ecommerceRoutes from '../routes/ecommerce';
 import channelRoutes from '../routes/channel';
 import customerRoutes from '../routes/customer';
 import orderRoutes from '../routes/order';
+import metricRoutes from '../routes/metrics';
 
 export class Server {
 
@@ -15,7 +16,8 @@ export class Server {
         customers: '/api/customers',
         ecommerce: '/api/ecommerce',
         channel: '/api/channel',
-        orders: '/api/orders'
+        orders: '/api/orders',
+        metrics: '/api/metrics'
     };
 
     constructor() {
@@ -42,6 +44,7 @@ export class Server {
         this.app.use(this.apiPaths.ecommerce, ecommerceRoutes);
         this.app.use(this.apiPaths.channel, channelRoutes);
         this.app.use(this.apiPaths.orders, orderRoutes);
+        this.app.use(this.apiPaths.metrics, metricRoutes);
         //Error handling
         this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(500).json({

@@ -100,7 +100,7 @@ const postOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         //buscamos si la orden ya existe
-        const existingOrder = yield order_1.default.findOne({ number: number, ecommerceId: ecommerce });
+        const existingOrder = yield order_1.default.findOne({ $and: [{ channel: channel }, { number: number }] });
         if (existingOrder) {
             return res.status(400).json({
                 message: `Order number ${number} already exists`

@@ -1,5 +1,7 @@
 "use strict";
-const Shopify = [
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Woocommerce = exports.Shopify = void 0;
+exports.Shopify = [
     {
         "channel": 1,
         "cancel_reason": null,
@@ -164,7 +166,7 @@ const Shopify = [
         }
     }
 ];
-const Woocommerce = [
+exports.Woocommerce = [
     {
         "channel": 2,
         "cancel-reason": null,

@@ -21,7 +21,7 @@ const normalizeOrder = (req, res, next) => {
     });
     const order = {
         channel: body.channel,
-        cancelReason: (body.cancel_reason ? body.cancel_reason : body['cancel-reason']),
+        cancelReason: body.cancel_reason || body['cancel-reason'],
         currency: body.currency,
         gateway: body.gateway,
         id: body.id,
@@ -29,7 +29,7 @@ const normalizeOrder = (req, res, next) => {
         locationId: body.location_id || body['location-id'],
         name: body.name,
         ownerNote: body.owner_note || body['owner-note'],
-        paymentStatus: body.payment_status || body['payment_stats'],
+        paymentStatus: body.payment_status || body['payment-stats'],
         status: body.status || body.stats,
         subtotal: body.subtotal,
         token: body.token,

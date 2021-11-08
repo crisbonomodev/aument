@@ -32,7 +32,7 @@ export const normalizeOrder = (req: Request, res: Response, next: NextFunction) 
         locationId: body.location_id || body['location-id'],
         name:body.name,
         ownerNote:body.owner_note || body['owner-note'],
-        paymentStatus:body.payment_status || body['payment_stats'],
+        paymentStatus:body.payment_status || body['payment-stats'],
         status:body.status || body.stats,
         subtotal:body.subtotal,
         token:body.token,

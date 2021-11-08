@@ -1,4 +1,4 @@
-const Shopify = [
+export const Shopify = [
     {
         "channel": 1,
         "cancel_reason": null,
@@ -164,7 +164,7 @@ const Shopify = [
     }
 ]
 
-const Woocommerce = [
+export const Woocommerce = [
     {
         "channel": 2,
         "cancel-reason": null,

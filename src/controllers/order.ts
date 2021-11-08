@@ -104,7 +104,7 @@ export const postOrder = async (req: Request, res: Response) => {
                     });
                 }
                 //buscamos si la orden ya existe
-                const existingOrder = await Order.findOne({number: number, ecommerceId: ecommerce});
+                const existingOrder = await Order.findOne({ $and: [ {channel:channel}, { number:number} ] });
                 if(existingOrder) {
                     return res.status(400).json({
                         message: `Order number ${number} already exists`

@@ -19,6 +19,7 @@ const ecommerce_1 = __importDefault(require("../routes/ecommerce"));
 const channel_1 = __importDefault(require("../routes/channel"));
 const customer_1 = __importDefault(require("../routes/customer"));
 const order_1 = __importDefault(require("../routes/order"));
+const metrics_1 = __importDefault(require("../routes/metrics"));
 class Server {
     constructor() {
         //paths para las rutas
@@ -26,7 +27,8 @@ class Server {
             customers: '/api/customers',
             ecommerce: '/api/ecommerce',
             channel: '/api/channel',
-            orders: '/api/orders'
+            orders: '/api/orders',
+            metrics: '/api/metrics'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8080';
@@ -50,6 +52,7 @@ class Server {
         this.app.use(this.apiPaths.ecommerce, ecommerce_1.default);
         this.app.use(this.apiPaths.channel, channel_1.default);
         this.app.use(this.apiPaths.orders, order_1.default);
+        this.app.use(this.apiPaths.metrics, metrics_1.default);
         //Error handling
         this.app.use((err, req, res, next) => {
             res.status(500).json({
